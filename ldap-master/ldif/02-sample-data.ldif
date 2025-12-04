@@ -1,0 +1,93 @@
+# Sample data entries for testing
+
+# Sample Undergraduate Student
+dn: cn=john.doe,ou=Undergraduate,ou=Students,ou=People,dc=college,dc=local
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: studentEntry
+cn: john.doe
+sn: Doe
+givenName: John
+mail: john.doe@college.local
+userPassword: {SSHA512}student123
+rollNumber: CS2024001
+departmentCode: CS101
+yearOfStudy: 2
+CGPA: 8.5
+hostelBlock: Block-A-101
+description: Undergraduate student in Computer Science
+
+# Sample Postgraduate Student
+dn: cn=jane.smith,ou=Postgraduate,ou=Students,ou=People,dc=college,dc=local
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: studentEntry
+cn: jane.smith
+sn: Smith
+givenName: Jane
+mail: jane.smith@college.local
+userPassword: {SSHA512}student123
+rollNumber: ME2024002
+departmentCode: ME202
+yearOfStudy: 1
+CGPA: 9.2
+hostelBlock: Block-B-205
+description: Postgraduate student in Mechanical Engineering
+
+# Sample Faculty Member
+dn: cn=prof.david.wilson,ou=Faculty,ou=People,dc=college,dc=local
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: facultyMember
+cn: prof.david.wilson
+sn: Wilson
+givenName: David
+mail: prof.david.wilson@college.local
+userPassword: {SSHA512}faculty123
+empID: FAC001
+specialization: Artificial Intelligence
+researchProjects: Machine Learning Applications
+researchProjects: Neural Networks
+publications: "Deep Learning in Computer Vision"
+publications: "AI Ethics in Modern Systems"
+employeeLevel: Senior
+buildingAccess: Main-Building
+buildingAccess: Research-Lab-A
+description: Senior Professor in Computer Science
+
+# Sample Staff Member
+dn: cn=mary.johnson,ou=Staff,ou=People,dc=college,dc=local
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: staffEntry
+cn: mary.johnson
+sn: Johnson
+givenName: Mary
+mail: mary.johnson@college.local
+userPassword: {SSHA512}staff123
+empID: STAFF001
+employeeLevel: Junior
+buildingAccess: Admin-Building
+loginAttempts: 0
+description: Administrative staff member
+
+# Sample Research Project
+dn: cn=ML-Research-2024,ou=Research,dc=college,dc=local
+objectClass: top
+objectClass: organizationalUnit
+objectClass: researchEntry
+cn: ML-Research-2024
+grantID: GRANT-2024-ML-001
+fundingAgency: National Science Foundation
+projectStatus: Active
+description: Machine Learning Research Project 2024
+businessCategory: Computer Science Research
+

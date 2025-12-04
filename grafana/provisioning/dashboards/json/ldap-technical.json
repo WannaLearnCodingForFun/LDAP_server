@@ -1,0 +1,237 @@
+{
+  "dashboard": {
+    "title": "LDAP Technical Deep Dive",
+    "tags": ["ldap", "technical", "monitoring"],
+    "timezone": "browser",
+    "schemaVersion": 38,
+    "version": 1,
+    "refresh": "5s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "Service Health Status",
+        "type": "table",
+        "gridPos": {"h": 6, "w": 24, "x": 0, "y": 0},
+        "targets": [
+          {
+            "expr": "up",
+            "refId": "A",
+            "format": "table",
+            "instant": true
+          }
+        ],
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {"Time": true, "__name__": true},
+              "indexByName": {"instance": 0, "job": 1, "Value": 2},
+              "renameByName": {
+                "Value": "Status",
+                "instance": "Instance",
+                "job": "Service"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "title": "API Request Rate (req/sec)",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 6},
+        "targets": [
+          {
+            "expr": "sum(rate(api_requests_total[5m])) by (endpoint)",
+            "refId": "A",
+            "legendFormat": "{{endpoint}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "reqps", "label": "Requests/sec"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 3,
+        "title": "API Requests by Endpoint",
+        "type": "bargauge",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 6},
+        "targets": [
+          {
+            "expr": "sum by (endpoint) (api_requests_total)",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "orientation": "horizontal",
+          "displayMode": "gradient"
+        }
+      },
+      {
+        "id": 4,
+        "title": "Total API Requests Over Time",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 14},
+        "targets": [
+          {
+            "expr": "sum(increase(api_requests_total[1m]))",
+            "refId": "A",
+            "legendFormat": "Total Requests"
+          },
+          {
+            "expr": "sum(rate(api_requests_total[5m]))",
+            "refId": "B",
+            "legendFormat": "Request Rate"
+          }
+        ],
+        "yaxes": [
+          {"format": "short", "label": "Count"},
+          {"format": "reqps"}
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Endpoint Distribution",
+        "type": "piechart",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 22},
+        "targets": [
+          {
+            "expr": "sum by (endpoint) (api_requests_total)",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Request Rate Heatmap",
+        "type": "heatmap",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 22},
+        "targets": [
+          {
+            "expr": "sum(rate(api_requests_total[1m])) by (endpoint)",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Service Uptime",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 30},
+        "targets": [
+          {
+            "expr": "time() - process_start_time_seconds{job=\"flask-api\"}",
+            "refId": "A",
+            "legendFormat": "Uptime"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "decimals": 0
+          }
+        }
+      },
+      {
+        "id": 8,
+        "title": "Memory Usage",
+        "type": "graph",
+        "gridPos": {"h": 6, "w": 9, "x": 6, "y": 30},
+        "targets": [
+          {
+            "expr": "process_resident_memory_bytes{job=\"flask-api\"}",
+            "refId": "A",
+            "legendFormat": "Resident Memory"
+          },
+          {
+            "expr": "process_virtual_memory_bytes{job=\"flask-api\"}",
+            "refId": "B",
+            "legendFormat": "Virtual Memory"
+          }
+        ],
+        "yaxes": [
+          {"format": "bytes", "label": "Memory"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 9,
+        "title": "CPU Usage",
+        "type": "graph",
+        "gridPos": {"h": 6, "w": 9, "x": 15, "y": 30},
+        "targets": [
+          {
+            "expr": "rate(process_cpu_seconds_total{job=\"flask-api\"}[5m]) * 100",
+            "refId": "A",
+            "legendFormat": "CPU %"
+          }
+        ],
+        "yaxes": [
+          {"format": "percent", "label": "CPU"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 10,
+        "title": "Open File Descriptors",
+        "type": "graph",
+        "gridPos": {"h": 6, "w": 12, "x": 0, "y": 36},
+        "targets": [
+          {
+            "expr": "process_open_fds{job=\"flask-api\"}",
+            "refId": "A",
+            "legendFormat": "Open FDs"
+          },
+          {
+            "expr": "process_max_fds{job=\"flask-api\"}",
+            "refId": "B",
+            "legendFormat": "Max FDs"
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "title": "Python GC Collections",
+        "type": "graph",
+        "gridPos": {"h": 6, "w": 12, "x": 12, "y": 36},
+        "targets": [
+          {
+            "expr": "rate(python_gc_collections_total{job=\"flask-api\"}[5m])",
+            "refId": "A",
+            "legendFormat": "GC Collections/sec"
+          }
+        ]
+      }
+    ],
+    "templating": {
+      "list": [
+        {
+          "name": "endpoint",
+          "type": "query",
+          "query": "label_values(api_requests_total, endpoint)",
+          "current": {"text": "All", "value": "$__all"},
+          "includeAll": true,
+          "multi": true
+        },
+        {
+          "name": "service",
+          "type": "query",
+          "query": "label_values(up, job)",
+          "current": {"text": "All", "value": "$__all"},
+          "includeAll": true,
+          "multi": true
+        }
+      ]
+    },
+    "annotations": {
+      "list": []
+    }
+  }
+}
+
+

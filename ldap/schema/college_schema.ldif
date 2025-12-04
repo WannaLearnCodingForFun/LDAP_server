@@ -1,0 +1,23 @@
+dn: cn=college,cn=schema,cn=config
+objectClass: olcSchemaConfig
+cn: college
+olcAttributeTypes: ( 1.3.6.1.4.1.4203.666.1.1 NAME 'rollNumber' DESC 'Student Roll Number' EQUALITY caseIgnoreMatch SUBSTR caseIgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE )
+olcAttributeTypes: ( 1.3.6.1.4.1.4203.666.1.2 NAME 'departmentCode' DESC 'Department Code' EQUALITY caseIgnoreMatch SUBSTR caseIgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE )
+olcAttributeTypes: ( 1.3.6.1.4.1.4203.666.1.3 NAME 'yearOfStudy' DESC 'Year of Study' EQUALITY integerMatch ORDERING integerOrderingMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 SINGLE-VALUE )
+olcAttributeTypes: ( 1.3.6.1.4.1.4203.666.1.4 NAME 'CGPA' DESC 'Cumulative GPA' EQUALITY numericStringMatch ORDERING numericStringOrderingMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.36 SINGLE-VALUE )
+olcAttributeTypes: ( 1.3.6.1.4.1.4203.666.1.5 NAME 'hostelBlock' DESC 'Hostel Block' EQUALITY caseIgnoreMatch SUBSTR caseIgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE )
+olcAttributeTypes: ( 1.3.6.1.4.1.4203.666.1.6 NAME 'empID' DESC 'Employee ID' EQUALITY caseIgnoreMatch SUBSTR caseIgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE )
+olcAttributeTypes: ( 1.3.6.1.4.1.4203.666.1.7 NAME 'specialization' DESC 'Faculty Specialization' EQUALITY caseIgnoreMatch SUBSTR caseIgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+olcAttributeTypes: ( 1.3.6.1.4.1.4203.666.1.8 NAME 'researchProjects' DESC 'Research Projects' EQUALITY caseIgnoreMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+olcAttributeTypes: ( 1.3.6.1.4.1.4203.666.1.9 NAME 'publications' DESC 'Publications' EQUALITY caseIgnoreMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+olcAttributeTypes: ( 1.3.6.1.4.1.4203.666.1.10 NAME 'grantID' DESC 'Research Grant ID' EQUALITY caseIgnoreMatch SUBSTR caseIgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE )
+olcAttributeTypes: ( 1.3.6.1.4.1.4203.666.1.11 NAME 'fundingAgency' DESC 'Funding Agency' EQUALITY caseIgnoreMatch SUBSTR caseIgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+olcAttributeTypes: ( 1.3.6.1.4.1.4203.666.1.12 NAME 'projectStatus' DESC 'Project Status' EQUALITY caseIgnoreMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+olcAttributeTypes: ( 1.3.6.1.4.1.4203.666.1.13 NAME 'employeeLevel' DESC 'Employee Level for RBAC' EQUALITY integerMatch ORDERING integerOrderingMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 SINGLE-VALUE )
+olcAttributeTypes: ( 1.3.6.1.4.1.4203.666.1.14 NAME 'loginAttempts' DESC 'Login Attempts' EQUALITY integerMatch ORDERING integerOrderingMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.27 SINGLE-VALUE )
+olcAttributeTypes: ( 1.3.6.1.4.1.4203.666.1.15 NAME 'buildingAccess' DESC 'Building Access Zones' EQUALITY caseIgnoreMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+olcObjectClasses: ( 1.3.6.1.4.1.4203.666.2.1 NAME 'studentEntry' SUP top AUXILIARY DESC 'Student attributes' MAY ( rollNumber $ departmentCode $ yearOfStudy $ CGPA $ hostelBlock ) )
+olcObjectClasses: ( 1.3.6.1.4.1.4203.666.2.2 NAME 'facultyMember' SUP top AUXILIARY DESC 'Faculty attributes' MAY ( empID $ specialization $ researchProjects $ publications $ employeeLevel ) )
+olcObjectClasses: ( 1.3.6.1.4.1.4203.666.2.3 NAME 'researchEntry' SUP top AUXILIARY DESC 'Research attributes' MAY ( grantID $ fundingAgency $ projectStatus ) )
+
+

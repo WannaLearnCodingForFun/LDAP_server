@@ -1,0 +1,146 @@
+# Base DIT Structure for College LDAP
+# This file creates the organizational structure
+
+dn: dc=college,dc=local
+objectClass: top
+objectClass: dcObject
+objectClass: organization
+o: College Local
+dc: college
+
+dn: ou=People,dc=college,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: People
+description: All people in the college
+
+dn: ou=Students,ou=People,dc=college,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: Students
+description: Student directory
+
+dn: ou=Undergraduate,ou=Students,ou=People,dc=college,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: Undergraduate
+description: Undergraduate students
+
+dn: ou=Postgraduate,ou=Students,ou=People,dc=college,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: Postgraduate
+description: Postgraduate students
+
+dn: ou=Faculty,ou=People,dc=college,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: Faculty
+description: Faculty members
+
+dn: ou=Staff,ou=People,dc=college,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: Staff
+description: Staff members
+
+dn: ou=Alumni,ou=People,dc=college,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: Alumni
+description: Alumni directory
+
+dn: ou=Departments,dc=college,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: Departments
+description: Academic departments
+
+dn: ou=ComputerScience,ou=Departments,dc=college,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: ComputerScience
+description: Computer Science Department
+
+dn: ou=Mechanical,ou=Departments,dc=college,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: Mechanical
+description: Mechanical Engineering Department
+
+dn: ou=Electrical,ou=Departments,dc=college,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: Electrical
+description: Electrical Engineering Department
+
+dn: ou=Civil,ou=Departments,dc=college,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: Civil
+description: Civil Engineering Department
+
+dn: ou=IT,dc=college,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: IT
+description: Information Technology Department
+
+dn: ou=Security,dc=college,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: Security
+description: Security Department
+
+dn: ou=Research,dc=college,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: Research
+description: Research projects and grants
+
+dn: ou=Groups,dc=college,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: Groups
+description: LDAP groups for access control
+
+dn: ou=Audit,dc=college,dc=local
+objectClass: top
+objectClass: organizationalUnit
+ou: Audit
+description: Audit log entries
+
+dn: cn=admin,dc=college,dc=local
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: admin
+sn: Administrator
+userPassword: {SSHA512}admin123
+description: LDAP Administrator
+
+dn: cn=replicator,dc=college,dc=local
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+cn: replicator
+sn: Replicator
+userPassword: {SSHA512}replicator123
+description: Replication user
+
+dn: cn=facultyGroup,ou=Groups,dc=college,dc=local
+objectClass: top
+objectClass: groupOfNames
+cn: facultyGroup
+member: cn=admin,dc=college,dc=local
+description: Faculty access group
+
+dn: cn=studentGroup,ou=Groups,dc=college,dc=local
+objectClass: top
+objectClass: groupOfNames
+cn: studentGroup
+member: cn=admin,dc=college,dc=local
+description: Student access group
+

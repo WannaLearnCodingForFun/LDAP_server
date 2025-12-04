@@ -1,0 +1,51 @@
+# Access Control Lists (ACLs) for LDAP
+# This file configures access control for different OUs
+
+dn: olcDatabase={1}mdb,cn=config
+changetype: modify
+add: olcAccess
+olcAccess: to dn.base="dc=college,dc=local"
+  by dn="cn=admin,dc=college,dc=local" write
+  by * read
+
+olcAccess: to dn.subtree="ou=Faculty,ou=People,dc=college,dc=local"
+  by dn="cn=admin,dc=college,dc=local" write
+  by group.exact="cn=facultyGroup,ou=Groups,dc=college,dc=local" read
+  by self read
+  by anonymous auth
+  by * none
+
+olcAccess: to dn.subtree="ou=Students,ou=People,dc=college,dc=local"
+  by dn="cn=admin,dc=college,dc=local" write
+  by group.exact="cn=studentGroup,ou=Groups,dc=college,dc=local" read
+  by self read
+  by anonymous auth
+  by * none
+
+olcAccess: to dn.subtree="ou=Staff,ou=People,dc=college,dc=local"
+  by dn="cn=admin,dc=college,dc=local" write
+  by self read
+  by anonymous auth
+  by * none
+
+olcAccess: to dn.subtree="ou=Research,dc=college,dc=local"
+  by dn="cn=admin,dc=college,dc=local" write
+  by group.exact="cn=facultyGroup,ou=Groups,dc=college,dc=local" read
+  by anonymous auth
+  by * none
+
+olcAccess: to dn.subtree="ou=Audit,dc=college,dc=local"
+  by dn="cn=admin,dc=college,dc=local" write
+  by * none
+
+olcAccess: to attrs=userPassword
+  by self write
+  by dn="cn=admin,dc=college,dc=local" write
+  by anonymous auth
+  by * none
+
+olcAccess: to *
+  by dn="cn=admin,dc=college,dc=local" write
+  by users read
+  by anonymous read
+

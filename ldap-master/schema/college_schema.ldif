@@ -1,0 +1,220 @@
+# College Custom Schema
+# This schema defines custom objectClasses and attributes for the college LDAP system
+
+dn: cn=college,cn=schema,cn=config
+objectClass: olcSchemaConfig
+cn: college
+olcAttributeTypes: {0}( 1.3.6.1.4.1.99999.1.1.1
+  NAME 'rollNumber'
+  DESC 'Student roll number'
+  EQUALITY caseIgnoreMatch
+  SUBSTR caseIgnoreSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+  SINGLE-VALUE )
+
+olcAttributeTypes: {1}( 1.3.6.1.4.1.99999.1.1.2
+  NAME 'departmentCode'
+  DESC 'Department code (e.g., CS101, ME202)'
+  EQUALITY caseIgnoreMatch
+  SUBSTR caseIgnoreSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+  SINGLE-VALUE )
+
+olcAttributeTypes: {2}( 1.3.6.1.4.1.99999.1.1.3
+  NAME 'yearOfStudy'
+  DESC 'Year of study (1-4 for undergraduate, 1-2 for postgraduate)'
+  EQUALITY integerMatch
+  ORDERING integerOrderingMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+  SINGLE-VALUE )
+
+olcAttributeTypes: {3}( 1.3.6.1.4.1.99999.1.1.4
+  NAME 'CGPA'
+  DESC 'Cumulative Grade Point Average'
+  EQUALITY numericStringMatch
+  ORDERING numericStringOrderingMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
+  SINGLE-VALUE )
+
+olcAttributeTypes: {4}( 1.3.6.1.4.1.99999.1.1.5
+  NAME 'hostelBlock'
+  DESC 'Hostel block assignment'
+  EQUALITY caseIgnoreMatch
+  SUBSTR caseIgnoreSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+  SINGLE-VALUE )
+
+olcAttributeTypes: {5}( 1.3.6.1.4.1.99999.1.2.1
+  NAME 'empID'
+  DESC 'Employee ID for faculty/staff'
+  EQUALITY caseIgnoreMatch
+  SUBSTR caseIgnoreSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+  SINGLE-VALUE )
+
+olcAttributeTypes: {6}( 1.3.6.1.4.1.99999.1.2.2
+  NAME 'specialization'
+  DESC 'Faculty specialization area'
+  EQUALITY caseIgnoreMatch
+  SUBSTR caseIgnoreSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+  SINGLE-VALUE )
+
+olcAttributeTypes: {7}( 1.3.6.1.4.1.99999.1.2.3
+  NAME 'researchProjects'
+  DESC 'Research project names (multi-valued)'
+  EQUALITY caseIgnoreMatch
+  SUBSTR caseIgnoreSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+
+olcAttributeTypes: {8}( 1.3.6.1.4.1.99999.1.2.4
+  NAME 'publications'
+  DESC 'Publication titles (multi-valued)'
+  EQUALITY caseIgnoreMatch
+  SUBSTR caseIgnoreSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+
+olcAttributeTypes: {9}( 1.3.6.1.4.1.99999.1.3.1
+  NAME 'grantID'
+  DESC 'Research grant ID'
+  EQUALITY caseIgnoreMatch
+  SUBSTR caseIgnoreSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+  SINGLE-VALUE )
+
+olcAttributeTypes: {10}( 1.3.6.1.4.1.99999.1.3.2
+  NAME 'fundingAgency'
+  DESC 'Funding agency name'
+  EQUALITY caseIgnoreMatch
+  SUBSTR caseIgnoreSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+  SINGLE-VALUE )
+
+olcAttributeTypes: {11}( 1.3.6.1.4.1.99999.1.3.3
+  NAME 'projectStatus'
+  DESC 'Project status (Active, Completed, Pending)'
+  EQUALITY caseIgnoreMatch
+  SUBSTR caseIgnoreSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+  SINGLE-VALUE )
+
+olcAttributeTypes: {12}( 1.3.6.1.4.1.99999.1.4.1
+  NAME 'employeeLevel'
+  DESC 'Employee level (Junior, Senior, Manager, Director)'
+  EQUALITY caseIgnoreMatch
+  SUBSTR caseIgnoreSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.1156.115.121.1.15
+  SINGLE-VALUE )
+
+olcAttributeTypes: {13}( 1.3.6.1.4.1.99999.1.4.2
+  NAME 'loginAttempts'
+  DESC 'Number of failed login attempts'
+  EQUALITY integerMatch
+  ORDERING integerOrderingMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.27
+  SINGLE-VALUE )
+
+olcAttributeTypes: {14}( 1.3.6.1.4.1.99999.1.4.3
+  NAME 'buildingAccess'
+  DESC 'Building access codes (multi-valued)'
+  EQUALITY caseIgnoreMatch
+  SUBSTR caseIgnoreSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+
+# Student Entry ObjectClass
+olcObjectClasses: {0}( 1.3.6.1.4.1.99999.2.1.1
+  NAME 'studentEntry'
+  DESC 'Student entry in college directory'
+  SUP inetOrgPerson
+  STRUCTURAL
+  MUST ( rollNumber $ departmentCode $ yearOfStudy )
+  MAY ( CGPA $ hostelBlock $ description ) )
+
+# Faculty Member ObjectClass
+olcObjectClasses: {1}( 1.3.6.1.4.1.99999.2.2.1
+  NAME 'facultyMember'
+  DESC 'Faculty member entry'
+  SUP inetOrgPerson
+  STRUCTURAL
+  MUST ( empID $ specialization )
+  MAY ( researchProjects $ publications $ employeeLevel $ buildingAccess ) )
+
+# Staff Entry ObjectClass
+olcObjectClasses: {2}( 1.3.6.1.4.1.99999.2.3.1
+  NAME 'staffEntry'
+  DESC 'Staff member entry'
+  SUP inetOrgPerson
+  STRUCTURAL
+  MUST empID
+  MAY ( employeeLevel $ buildingAccess $ loginAttempts ) )
+
+# Research Entry ObjectClass
+olcObjectClasses: {3}( 1.3.6.1.4.1.99999.2.4.1
+  NAME 'researchEntry'
+  DESC 'Research project entry'
+  SUP organizationalUnit
+  STRUCTURAL
+  MUST ( grantID $ fundingAgency $ projectStatus )
+  MAY ( description $ businessCategory ) )
+
+# Audit Entry ObjectClass
+olcObjectClasses: {4}( 1.3.6.1.4.1.99999.2.5.1
+  NAME 'auditEntry'
+  DESC 'Audit log entry for LDAP operations'
+  SUP top
+  STRUCTURAL
+  MUST ( cn $ auditTimestamp $ auditAction $ auditActorDN )
+  MAY ( auditTargetDN $ auditOldValue $ auditNewValue $ auditIP $ description ) )
+
+olcAttributeTypes: {15}( 1.3.6.1.4.1.99999.1.5.1
+  NAME 'auditTimestamp'
+  DESC 'Timestamp of audit event'
+  EQUALITY generalizedTimeMatch
+  ORDERING generalizedTimeOrderingMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.24
+  SINGLE-VALUE )
+
+olcAttributeTypes: {16}( 1.3.6.1.4.1.99999.1.5.2
+  NAME 'auditAction'
+  DESC 'Action performed (add, delete, modify, bind)'
+  EQUALITY caseIgnoreMatch
+  SUBSTR caseIgnoreSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+  SINGLE-VALUE )
+
+olcAttributeTypes: {17}( 1.3.6.1.4.1.99999.1.5.3
+  NAME 'auditActorDN'
+  DESC 'DN of the user who performed the action'
+  EQUALITY distinguishedNameMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.12
+  SINGLE-VALUE )
+
+olcAttributeTypes: {18}( 1.3.6.1.4.1.99999.1.5.4
+  NAME 'auditTargetDN'
+  DESC 'DN of the entry that was modified'
+  EQUALITY distinguishedNameMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.12
+  SINGLE-VALUE )
+
+olcAttributeTypes: {19}( 1.3.6.1.4.1.99999.1.5.5
+  NAME 'auditOldValue'
+  DESC 'Old value before modification'
+  EQUALITY caseIgnoreMatch
+  SUBSTR caseIgnoreSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+
+olcAttributeTypes: {20}( 1.3.6.1.4.1.99999.1.5.6
+  NAME 'auditNewValue'
+  DESC 'New value after modification'
+  EQUALITY caseIgnoreMatch
+  SUBSTR caseIgnoreSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+
+olcAttributeTypes: {21}( 1.3.6.1.4.1.99999.1.5.7
+  NAME 'auditIP'
+  DESC 'IP address of the client'
+  EQUALITY caseIgnoreMatch
+  SUBSTR caseIgnoreSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+  SINGLE-VALUE )
+

@@ -1,0 +1,30 @@
+dn: olcDatabase={1}mdb,cn=config
+changetype: modify
+add: olcSyncRepl
+olcSyncRepl: rid=010 provider=ldaps://ldap-master binddn="cn=admin,dc=college,dc=local" bindmethod=simple credentials=admin searchbase="dc=college,dc=local" type=refreshAndPersist retry="5 5 300 +" starttls=no tls_cacert=/container/service/slapd/assets/certs/ca.crt
+-
+add: olcUpdateRef
+olcUpdateRef: ldaps://ldap-master
+
+dn: cn=module{0},cn=config
+changetype: modify
+add: olcModuleLoad
+olcModuleLoad: auditlog
+
+dn: olcOverlay=auditlog,olcDatabase={1}mdb,cn=config
+objectClass: olcOverlayConfig
+objectClass: olcAuditLogConfig
+olcOverlay: auditlog
+olcAuditlogFile: /var/lib/ldap/audit.log
+
+dn: ou=Audit,dc=college,dc=local
+objectClass: organizationalUnit
+ou: Audit
+
+
+
+
+
+
+
+

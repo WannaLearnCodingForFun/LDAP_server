@@ -1,0 +1,15 @@
+dn: dc=college,dc=local
+objectClass: top
+objectClass: dcObject
+objectClass: organization
+o: College Local
+dc: college
+
+dn: cn=admin,dc=college,dc=local
+objectClass: simpleSecurityObject
+objectClass: organizationalRole
+cn: admin
+description: LDAP admin
+userPassword: admin
+
+

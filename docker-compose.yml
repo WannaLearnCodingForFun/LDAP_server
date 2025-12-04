@@ -1,0 +1,182 @@
+version: "3.9"
+
+services:
+  ldap-master:
+    image: osixia/openldap:1.5.0
+    container_name: ldap-master
+    restart: unless-stopped
+    environment:
+      - LDAP_ORGANISATION=College Local
+      - LDAP_DOMAIN=college.local
+      - LDAP_ADMIN_PASSWORD=admin
+      - LDAP_CONFIG_PASSWORD=config
+      - LDAP_TLS=false
+      - LDAP_REPLICATION=false
+    ports:
+      - "389:389"
+      - "636:636"
+    volumes:
+      - ldap_master_data:/var/lib/ldap
+      - ldap_master_config:/etc/ldap/slapd.d
+    networks:
+      - ldap_net
+
+  ldap-replica:
+    image: osixia/openldap:1.5.0
+    container_name: ldap-replica
+    restart: unless-stopped
+    environment:
+      - LDAP_ORGANISATION=College Local
+      - LDAP_DOMAIN=college.local
+      - LDAP_ADMIN_PASSWORD=admin
+      - LDAP_CONFIG_PASSWORD=config
+      - LDAP_TLS=true
+      - LDAP_TLS_CRT_FILENAME=ldap-replica.crt
+      - LDAP_TLS_KEY_FILENAME=ldap-replica.key
+      - LDAP_TLS_CA_CRT_FILENAME=ca.crt
+    volumes:
+      - ldap_replica_data:/var/lib/ldap
+      - ldap_replica_config:/etc/ldap/slapd.d
+      - ./ldap/replica/init:/container/service/slapd/assets/config/bootstrap/ldif/custom
+      - ./ldap/schema:/container/service/slapd/assets/config/bootstrap/schema/custom
+      - ./certs/replica:/container/service/slapd/assets/certs
+    depends_on:
+      - ldap-master
+    networks:
+      - ldap_net
+
+  ldap-audit:
+    image: osixia/openldap:1.5.0
+    container_name: ldap-audit
+    restart: unless-stopped
+    environment:
+      - LDAP_ORGANISATION=College Local
+      - LDAP_DOMAIN=college.local
+      - LDAP_ADMIN_PASSWORD=admin
+      - LDAP_CONFIG_PASSWORD=config
+      - LDAP_TLS=true
+      - LDAP_TLS_CRT_FILENAME=ldap-audit.crt
+      - LDAP_TLS_KEY_FILENAME=ldap-audit.key
+      - LDAP_TLS_CA_CRT_FILENAME=ca.crt
+    volumes:
+      - ldap_audit_data:/var/lib/ldap
+      - ldap_audit_config:/etc/ldap/slapd.d
+      - ./ldap/audit/init:/container/service/slapd/assets/config/bootstrap/ldif/custom
+      - ./ldap/schema:/container/service/slapd/assets/config/bootstrap/schema/custom
+      - ./certs/audit:/container/service/slapd/assets/certs
+    depends_on:
+      - ldap-master
+    networks:
+      - ldap_net
+
+  phpldapadmin:
+    image: osixia/phpldapadmin:0.9.0
+    container_name: phpldapadmin
+    restart: unless-stopped
+    environment:
+      - PHPLDAPADMIN_LDAP_HOSTS=ldap-master
+      - PHPLDAPADMIN_HTTPS=false
+    ports:
+      - "8080:80"
+    depends_on:
+      - ldap-master
+    networks:
+      - ldap_net
+
+  postgres:
+    image: postgres:16
+    container_name: ldap-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=ldap
+      - POSTGRES_PASSWORD=ldap
+      - POSTGRES_DB=ldap_logs
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - ldap_net
+
+  redis:
+    image: redis:7-alpine
+    container_name: ldap-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - ldap_net
+
+  flask-api:
+    build: ./flask-api
+    container_name: flask-api
+    restart: unless-stopped
+    environment:
+      - LDAP_URI=ldaps://ldap-master:636
+      - LDAP_BIND_DN=cn=admin,dc=college,dc=local
+      - LDAP_BIND_PASSWORD=admin
+      - JWT_SECRET=supersecretjwt
+      - POSTGRES_DSN=postgresql://ldap:ldap@postgres:5432/ldap_logs
+      - RATE_LIMIT_PER_MINUTE=120
+      - ENABLE_2FA=true
+    ports:
+      - "5001:5000"
+    depends_on:
+      - ldap-master
+      - postgres
+      - redis
+    networks:
+      - ldap_net
+
+  react-dashboard:
+    build: ./react-dashboard
+    container_name: react-dashboard
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_BASE=http://localhost:5000
+    depends_on:
+      - flask-api
+    networks:
+      - ldap_net
+
+  prometheus:
+    image: prom/prometheus:v2.55.0
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    networks:
+      - ldap_net
+
+  grafana:
+    image: grafana/grafana:11.2.0
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+    networks:
+      - ldap_net
+
+volumes:
+  ldap_master_data: {}
+  ldap_master_config: {}
+  ldap_replica_data: {}
+  ldap_replica_config: {}
+  ldap_audit_data: {}
+  ldap_audit_config: {}
+  pg_data: {}
+  grafana_data: {}
+
+networks:
+  ldap_net:
+    driver: bridge
+

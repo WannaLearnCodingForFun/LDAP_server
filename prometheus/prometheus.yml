@@ -1,0 +1,82 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'ldap-cluster'
+    environment: 'localhost'
+
+scrape_configs:
+  # Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          service: 'prometheus'
+
+  # Flask API Metrics
+  - job_name: 'flask-api'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['flask-api:5000']
+        labels:
+          service: 'flask-api'
+          component: 'api-gateway'
+
+  # LDAP Master - using ldap_exporter pattern (if we add exporter later)
+  - job_name: 'ldap-master'
+    static_configs:
+      - targets: ['ldap-master:389']
+        labels:
+          service: 'ldap'
+          role: 'master'
+          instance: 'ldap-master'
+
+  # LDAP Replica
+  - job_name: 'ldap-replica'
+    static_configs:
+      - targets: ['ldap-replica:389']
+        labels:
+          service: 'ldap'
+          role: 'replica'
+          instance: 'ldap-replica'
+
+  # LDAP Audit
+  - job_name: 'ldap-audit'
+    static_configs:
+      - targets: ['ldap-audit:389']
+        labels:
+          service: 'ldap'
+          role: 'audit'
+          instance: 'ldap-audit'
+
+  # PostgreSQL (if postgres_exporter is added)
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres:5432']
+        labels:
+          service: 'postgresql'
+          database: 'ldap_logs'
+
+  # Redis (if redis_exporter is added)
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis:6379']
+        labels:
+          service: 'redis'
+
+  # Node Exporter for system metrics (if added)
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+        labels:
+          service: 'system'
+
+# Alerting rules (for future use)
+rule_files:
+  # - "alerts.yml"
+
+# Alertmanager configuration (for future use)
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets: ['alertmanager:9093']

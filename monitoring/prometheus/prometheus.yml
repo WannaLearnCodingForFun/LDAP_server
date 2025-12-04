@@ -1,0 +1,18 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'flask-api'
+    static_configs:
+      - targets: ['flask-api:5000']
+    metrics_path: '/metrics'
+
+  - job_name: 'ldap-master'
+    static_configs:
+      - targets: ['ldap-master:389']
+
+  - job_name: 'ldap-replica'
+    static_configs:
+      - targets: ['ldap-replica:389']
+

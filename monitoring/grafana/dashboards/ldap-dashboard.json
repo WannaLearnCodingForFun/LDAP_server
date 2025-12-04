@@ -1,0 +1,38 @@
+{
+  "dashboard": {
+    "title": "LDAP Monitoring Dashboard",
+    "panels": [
+      {
+        "title": "LDAP Operations",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(ldap_operations_total[5m])",
+            "legendFormat": "{{operation}}"
+          }
+        ]
+      },
+      {
+        "title": "LDAP Bind Attempts",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(ldap_bind_attempts_total[5m])",
+            "legendFormat": "{{status}}"
+          }
+        ]
+      },
+      {
+        "title": "Active Connections",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "ldap_active_connections",
+            "legendFormat": "Connections"
+          }
+        ]
+      }
+    ]
+  }
+}
+

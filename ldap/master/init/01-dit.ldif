@@ -1,0 +1,65 @@
+dn: ou=People,dc=college,dc=local
+objectClass: organizationalUnit
+ou: People
+
+dn: ou=Students,ou=People,dc=college,dc=local
+objectClass: organizationalUnit
+ou: Students
+
+dn: ou=Undergraduate,ou=Students,ou=People,dc=college,dc=local
+objectClass: organizationalUnit
+ou: Undergraduate
+
+dn: ou=Postgraduate,ou=Students,ou=People,dc=college,dc=local
+objectClass: organizationalUnit
+ou: Postgraduate
+
+dn: ou=Faculty,ou=People,dc=college,dc=local
+objectClass: organizationalUnit
+ou: Faculty
+
+dn: ou=Staff,ou=People,dc=college,dc=local
+objectClass: organizationalUnit
+ou: Staff
+
+dn: ou=Alumni,ou=People,dc=college,dc=local
+objectClass: organizationalUnit
+ou: Alumni
+
+dn: ou=Departments,dc=college,dc=local
+objectClass: organizationalUnit
+ou: Departments
+
+dn: ou=ComputerScience,ou=Departments,dc=college,dc=local
+objectClass: organizationalUnit
+ou: ComputerScience
+
+dn: ou=Mechanical,ou=Departments,dc=college,dc=local
+objectClass: organizationalUnit
+ou: Mechanical
+
+dn: ou=Electrical,ou=Departments,dc=college,dc=local
+objectClass: organizationalUnit
+ou: Electrical
+
+dn: ou=Civil,ou=Departments,dc=college,dc=local
+objectClass: organizationalUnit
+ou: Civil
+
+dn: ou=IT,dc=college,dc=local
+objectClass: organizationalUnit
+ou: IT
+
+dn: ou=Security,dc=college,dc=local
+objectClass: organizationalUnit
+ou: Security
+
+dn: ou=Research,dc=college,dc=local
+objectClass: organizationalUnit
+ou: Research
+
+dn: ou=Groups,dc=college,dc=local
+objectClass: organizationalUnit
+ou: Groups
+
+
